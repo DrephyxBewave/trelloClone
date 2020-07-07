@@ -19,12 +19,13 @@
         "typ": "access"
       },
       "audience": "https://trelloClone.com",
+      "subject": "auth",
       "issuer": "feathers",
       "algorithm": "HS256",
       "expiresIn": "1d"
     },
     "local": {
-      "usernameField": "email",
+      "usernameField": "username",
       "passwordField": "password"
     }
   },
