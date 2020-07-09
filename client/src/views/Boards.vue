@@ -1,27 +1,9 @@
 <template>
   <v-container @click="createMode = false" fill-height fluid pa-0>
-    <wait-bar v-if="loading" text="Loading Boards..."/>
-    <v-layout v-if="!loading" column pa-0>
+    <v-layout column pa-0>
       <v-flex xs12>
         <v-container grid-list-md fluid>
           <v-layout align-start justify-start row wrap>
-            <v-flex
-              v-for="board in boards"
-              :key="board._id"
-              xs12
-              sm6
-              md4
-              lg2
-              xl1
-            >
-              <board-card :board="board" :currentUser="user"/>
-            </v-flex>
-            <v-flex xs12 sm6 md4 lg2 xl1>
-              <board-create
-                :createMode="createMode"
-                v-on:activateCreateMode="createMode = true"
-              />
-            </v-flex>
           </v-layout>
         </v-container>
       </v-flex>

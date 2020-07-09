@@ -4,6 +4,7 @@ import Home from '../views/Home.vue';
 import Signup from '../views/Signup.vue';
 import Login from '../views/Login.vue';
 import Boards from '../views/Boards.vue';
+import store from '../store';
 
 Vue.use(VueRouter);
 // new comment
@@ -12,6 +13,14 @@ const routes = [
     path: '/',
     name: 'Home',
     component: Home,
+    beforeEnter(to, from, next) {
+      store.dispatch('auth/authenticate').then(() => {
+        next('/boards');
+      }).catch((e) => {
+        console.error('Authentication error, can not connect you to home', e);
+        next('/login');
+      });
+    },
   },
   {
     path: '/about',
@@ -35,6 +44,14 @@ const routes = [
     path: '/boards',
     name: 'boards',
     component: Boards,
+    beforeEnter(to, from, next) {
+      store.dispatch('auth/authenticate').then(() => {
+        next('/boards');
+      }).catch((e) => {
+        console.error('Authentication error', e);
+        next('/login');
+      });
+    },
   },
 ];
 
