@@ -4,6 +4,6 @@ module.exports = {
     'feathers-vuex',
   ],
   configureWebpack: {
-      devtool:'source-map'
-  }
+    devtool: 'source-map',
+  },
 };
