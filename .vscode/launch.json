@@ -14,7 +14,7 @@
       "type": "node"
     },
     {
-      "name": "Attach front end",
+      "name": "Launch front end",
       "port": 9223,
       "request": "launch",
       "skipFiles": [
@@ -22,9 +22,9 @@
       ],
       "type": "chrome",
       "url": "http://localhost:8080",
-      "webRoot": "${workspaceFolder}/trelloCloneClient/client",
+      "webRoot": "${workspaceFolder}/client",
       "userDataDir": true,
-      "breakOnLoad": true,
+      "breakOnLoad": false,
       "sourceMapPathOverrides": {
         "webpack:///*": "${webRoot}/*"
       }
