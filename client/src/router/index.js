@@ -5,6 +5,7 @@ import Signup from '../views/Signup.vue';
 import Login from '../views/Login.vue';
 import Boards from '../views/Boards.vue';
 import store from '../store';
+import Board from '../views/Board.vue';
 
 Vue.use(VueRouter);
 // new comment
@@ -13,14 +14,6 @@ const routes = [
     path: '/',
     name: 'Home',
     component: Home,
-    beforeEnter(to, from, next) {
-      store.dispatch('auth/authenticate').then(() => {
-        next('/boards');
-      }).catch((e) => {
-        console.error('Authentication error, can not connect you to home', e);
-        next('/login');
-      });
-    },
   },
   {
     path: '/about',
@@ -44,14 +37,11 @@ const routes = [
     path: '/boards',
     name: 'boards',
     component: Boards,
-    beforeEnter(to, from, next) {
-      store.dispatch('auth/authenticate').then(() => {
-        next('/boards');
-      }).catch((e) => {
-        console.error('Authentication error', e);
-        next('/login');
-      });
-    },
+  },
+  {
+    path: '/boards/:id',
+    name: 'board',
+    component: Board,
   },
 ];
 
@@ -59,6 +49,24 @@ const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes,
+});
+
+// Global session route dispatching
+router.beforeEach((to, from, next) => {
+  // Authenticate with the jwt
+  store.dispatch('auth/authenticate').then(() => {
+    if (['/', '/signup', '/login'].includes(to.path)) {
+      next('/boards');
+    } else {
+      next();
+    }
+  }).catch(() => {
+    if (['/', '/signup', '/login'].includes(to.path)) {
+      next();
+    } else {
+      next('/login');
+    }
+  });
 });
 
 export default router;

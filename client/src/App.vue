@@ -33,7 +33,10 @@ export default {
     ...mapState('auth', { user: 'payload' }),
   },
   methods: {
-    ...mapActions('auth', ['logout']),
+    ...mapActions('auth', { authLogout: 'logout' }),
+    logout() {
+      this.authLogout().then(() => this.$router.go('/login'));
+    },
   },
 };
 </script>
