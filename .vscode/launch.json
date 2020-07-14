@@ -8,6 +8,7 @@
       "name": "Attach back end",
       "port": 9229,
       "request": "attach",
+      "stopOnEntry": false,
       "skipFiles": [
         "<node_internals>/**"
       ],

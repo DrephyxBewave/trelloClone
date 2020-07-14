@@ -72,8 +72,8 @@ export default {
         // Authenticate with the local email/password strategy
         this.feathersLogin({ username: this.user.username, password: this.user.password, strategy: 'local' })
           .then(() => {
-          // Logged in
-            this.$router.push('/boards');
+            // Logged in
+            this.$router.go('/boards');
           }).catch((e) => {
           // Show login page (potentially with `e.message`)
             console.error('Authentication error', e);

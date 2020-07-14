@@ -1,31 +1,61 @@
 <template>
-  <v-container @click="createMode = false" fill-height fluid pa-0>
-    <wait-bar v-if="loading" text="Loading Boards..."/>
-    <v-layout v-if="!loading" column pa-0>
-      <v-flex xs12>
+  <v-container fluid pa-0>
+    <v-row align="start" justify="center" v-if="loading">
+      <v-progress-circular
+      :size="70" :width="7" indeterminate color="success">
+      </v-progress-circular>
+    </v-row>
+    <v-row align="start" justify="start" v-if="!loading">
+      <v-col>
         <v-container grid-list-md fluid>
-          <v-layout align-start justify-start row wrap>
-            <v-flex
+          <v-row align="start" justify="start">
+            <v-col
               v-for="board in boards"
               :key="board._id"
-              xs12
-              sm6
-              md4
-              lg2
-              xl1
+              cols="3"
             >
-              <board-card :board="board" :currentUser="user"/>
-            </v-flex>
-            <v-flex xs12 sm6 md4 lg2 xl1>
-              <board-create
-                :createMode="createMode"
-                v-on:activateCreateMode="createMode = true"
-              />
-            </v-flex>
-          </v-layout>
+            <board-card :board="board" :currentUser="user" />
+            </v-col>
+            <v-col cols="3">
+              <v-card>
+                <v-card-title primary-title style="flex-direction: column;">
+                  <div class="headline">Create Board
+                  </div>
+                  <div>
+                    <v-form
+                      v-if="!createMode"
+                      v-model="valid"
+                      @submit.prevent="createBoard"
+                      @keydown.enter.prevent
+                    >
+                      <v-text-field
+                        v-model="board.name"
+                        :rules="[notEmptyRules]"
+                        label="Name"
+                        required
+                      ></v-text-field>
+                      <v-text-field
+                        v-model="board.background"
+                        :rules="[notEmptyRules]"
+                        label="Background"
+                        required
+                      ></v-text-field>
+                      <v-btn
+                        type="submit"
+                        :loading="creating"
+                        :disabled="!valid || creating"
+                      >Create</v-btn>
+                    </v-form>
+                  </div>
+                </v-card-title>
+                <v-card-actions>
+                </v-card-actions>
+              </v-card>
+            </v-col>
+          </v-row>
         </v-container>
-      </v-flex>
-    </v-layout>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
@@ -33,65 +63,48 @@
 import {
   mapState, mapActions, mapGetters, mapMutations,
 } from 'vuex';
-/* import _ from 'lodash';
 import BoardCard from '../components/BoardCard.vue';
-import BoardCreate from '../components/BoardCreate.vue';
-import WaitBar from '../components/WaitBar.vue'; */
 
 export default {
   name: 'Boards',
   components: {
-    /*     BoardCard,
-    BoardCreate,
-    WaitBar, */
+    BoardCard,
   },
   data: () => ({
     valid: false,
     createMode: false,
+    board: {
+      name: '',
+      background: 'https://scx2.b-cdn.net/gfx/news/hires/2018/lion.jpg',
+    },
     notEmptyRules: (value) => !!value || 'Cannot be empty',
   }),
-  /*   mounted() {
-    this.findBoards({
-      query: {
-        // eslint-disable-next-line
-        ownerId: this.user._id,
-      },
-    });
+  mounted() {
+    this.fetchBoardsFromFeathers();
   },
-  watch: {
-    // eslint-disable-next-line
-    boards: _.debounce(function () {
-      this.clearActivities();
-    }, 100),
-  }, */
   computed: {
-    /*     ...mapState('auth', { user: 'user' }),
+    ...mapState('auth', { user: 'user' }),
     ...mapState('boards', { creating: 'isCreatePending' }),
     ...mapState('boards', { loading: 'isFindPending' }),
-    ...mapGetters('boards', { findBoardsInStore: 'find' }),
+    ...mapGetters('boards', { findBoardsInVuex: 'find' }),
     boards() {
       return this.user
-        ? this.findBoardsInStore({
-          query: {
-            // eslint-disable-next-line
-              ownerId: this.user._id,
-          },
-        }).data
+        ? this.findBoardsInVuex().data
         : [];
-    }, */
+    },
   },
   methods: {
-    /*     ...mapMutations('activities', { clearActivities: 'clearAll' }),
-    ...mapActions('boards', { findBoards: 'find' }),
+    ...mapMutations('activities', { clearActivities: 'clearAll' }),
+    ...mapActions('boards', { fetchBoardsFromFeathers: 'find' }),
     ...mapActions('boards', { removeBoard: 'remove' }),
-    async createBoard() {
+    createBoard() {
       if (this.valid) {
-        const { Board } = this.$FeathersVuex;
+        const { Board } = this.$FeathersVuex.api;
         const board = new Board(this.board);
-        await board.save();
-        this.$refs.form.reset();
+        board.save();
+        // this.$refs.form.reset();
       }
-    }, */
+    },
   },
 };
 </script>
