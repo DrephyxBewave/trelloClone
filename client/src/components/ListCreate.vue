@@ -1,14 +1,14 @@
 <template>
   <v-card
+    v-if="!isCreating"
     flat
     ripple
-    @click.stop="$emit('activateCreateMode')"
     :style="'opacity: ' + (cardHover ? '1' : '0.7') +'; cursor: pointer; color: white;'"
     pa-0
+    color="grey darken-2"
+    @click.stop="$emit('activateCreateMode')"
     @mouseenter="cardHover = true"
     @mouseleave="cardHover = false"
-    color="grey darken-2"
-    v-if="!isCreating"
   >
     <v-container pa-1>
       <v-row column>
@@ -35,19 +35,21 @@
                 label="Name"
                 required
                 autofocus
-              ></v-text-field>
+              />
             </v-col>
           </v-row>
         </v-container>
       </v-card-title>
       <v-card-actions>
-        <v-spacer></v-spacer>
+        <v-spacer />
         <v-btn
           color="success"
           type="submit"
           :loading="creating"
           :disabled="!valid || creating"
-        >Create</v-btn>
+        >
+          Create
+        </v-btn>
       </v-card-actions>
     </v-form>
   </v-card>

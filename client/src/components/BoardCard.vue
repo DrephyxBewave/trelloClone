@@ -19,10 +19,10 @@
               :width="2"
               color="primary"
               indeterminate
-            ></v-progress-circular>
-            <span class="body-1" v-if="!loadingUser">
+            />
+            <span v-if="!loadingUser" class="body-1">
               <v-avatar :size="20">
-                <v-gravatar :email="ownerUser.email"/>
+                <v-gravatar :email="ownerUser.email" />
               </v-avatar>
               {{ owner }} - {{ board.updatedAt }}
             </span>
@@ -38,7 +38,6 @@
                 <v-icon>delete_forever</v-icon>
               </v-btn>
             </v-row>
-
           </v-col>
         </v-row>
       </v-container>
@@ -51,10 +50,13 @@ import { mapState, mapActions } from 'vuex';
 
 export default {
   name: 'board-card',
+
   props: ['board', 'currentUser'],
+
   data: () => ({
     ownerUser: '',
   }),
+
   computed: {
     ...mapState('users', { loadingUser: 'isGetPending' }),
     owner() {
@@ -64,6 +66,11 @@ export default {
       return this.ownerUser.displayname;
     },
   },
+
+  beforeMount() {
+    this.getOwner();
+  },
+
   methods: {
     ...mapActions('users', { getUser: 'get' }),
     ...mapActions('boards', { removeBoard: 'remove' }),
@@ -71,14 +78,13 @@ export default {
       // eslint-disable-next-line
       this.$router.push({ name: 'board', params: { id: this.board._id } });
     },
+
     getOwner() {
-      this.getUser(this.board.ownerId).then((user) => {
+      this.getUser(this.board.ownerId).then(user => {
         this.ownerUser = user;
       });
     },
-  },
-  beforeMount() {
-    this.getOwner();
+
   },
 };
 </script>

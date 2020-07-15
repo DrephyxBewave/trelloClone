@@ -1,11 +1,14 @@
 <template>
   <v-container fluid>
     <v-slide-y-transition mode="out-in">
-      <v-layout column align-center>
+      <v-layout
+        column
+        align-center
+      >
         <v-form
+          v-if="!loading"
           ref="form"
           v-model="valid"
-          v-if="!loading"
           lazy-validation
           @submit.prevent="signup"
           @keydown.prevent.enter
@@ -16,14 +19,14 @@
             label="Display name"
             required
             :disabled="loading"
-          ></v-text-field>
+          />
           <v-text-field
             v-model="user.username"
             :rules="[notEmptyRules]"
             label="Username"
             required
             :disabled="loading"
-          ></v-text-field>
+          />
           <v-text-field
             v-model="user.email"
             :rules="[notEmptyRules,validEmail]"
@@ -31,7 +34,7 @@
             type="email"
             required
             :disabled="loading"
-          ></v-text-field>
+          />
 
           <v-text-field
             v-model="user.password"
@@ -40,7 +43,7 @@
             type="password"
             required
             :disabled="loading"
-          ></v-text-field>
+          />
 
           <v-text-field
             v-model="user.confirmPassword"
@@ -49,7 +52,7 @@
             type="password"
             required
             :disabled="loading"
-          ></v-text-field>
+          />
 
           <v-btn
             :disabled="!valid || loading"
@@ -62,18 +65,18 @@
           </v-btn>
         </v-form>
         <v-progress-circular
-        v-if="loading"
-        :size="70"
-        :width="7"
-        indeterminate
-        color="success"
-        ></v-progress-circular>
+          v-if="loading"
+          :size="70"
+          :width="7"
+          indeterminate
+          color="success"
+        />
       </v-layout>
     </v-slide-y-transition>
     <error-pop
       v-model="dialog"
-      errTitle="Authentication Error"
-      :errText="signUpErr"
+      err-title="Authentication Error"
+      :err-text="signUpErr"
     />
   </v-container>
 </template>
@@ -88,13 +91,18 @@ import { notEmptyRules, validEmail } from '../utils/rules';
 
 export default {
   name: 'Signup',
+
   components: {
     ErrorPop,
   },
-  data: (vm) => ({
+
+  data: vm => ({
     valid: false,
+
     dialog: false,
+
     signUpErr: '',
+
     user: {
       username: '',
       password: '',
@@ -102,9 +110,12 @@ export default {
       confirmPassword: '',
       displayName: '',
     },
+
     notEmptyRules,
+
     validEmail,
-    confirmPasswordRules: (value) => value === vm.user.password || 'Password must match',
+
+    confirmPasswordRules: value => value === vm.user.password || 'Password must match',
   }),
 
   computed: {
@@ -120,7 +131,7 @@ export default {
           .then(() => {
             this.$router.push('/login');
           })
-          .catch((err) => {
+          .catch(err => {
             this.signUpErr = err.message;
             this.dialog = true;
           });
