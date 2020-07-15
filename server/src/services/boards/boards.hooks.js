@@ -3,7 +3,7 @@ const { setField } = require('feathers-authentication-hooks');
 
 module.exports = {
   before: {
-    all: [ authenticate('jwt') ],
+    all: [authenticate('jwt')],
     find: [
       setField({ from: 'params.user._id', as: 'params.query.ownerId' })
     ],
