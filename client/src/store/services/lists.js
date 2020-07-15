@@ -8,7 +8,7 @@ class List extends BaseModel {
   }
 
   // Required for $FeathersVuex plugin to work after production transpile.
-  // eslint-disable-next-line
+  // eslint disable-next-line
   static modelName = 'List';
 
   // Define default properties here
