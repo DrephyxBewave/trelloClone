@@ -28,22 +28,17 @@
             </span>
           </v-col>
           <v-col xs2 pa-0>
-            <v-btn
-              fab
-              text
-              small
-              color="red"
-              @click.stop="removeBoard(board._id)"
-            >
-              <v-icon>delete_forever</v-icon>
-            </v-btn>
-          </v-col>
-          <v-col xs2 pa-0>
-            <v-btn
-              color="primary"
-              @click="open"
-            >Go
-            </v-btn>
+            <v-row justify="end">
+              <v-btn
+                text
+                small
+                color="red"
+                @click.stop="removeBoard(board._id)"
+              >
+                <v-icon>delete_forever</v-icon>
+              </v-btn>
+            </v-row>
+
           </v-col>
         </v-row>
       </v-container>
