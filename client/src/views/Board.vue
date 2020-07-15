@@ -1,13 +1,15 @@
 <template>
   <v-container
     fill-height
+    align-start
+    align-content-start
     fluid
-    pa-0
+    pa-2
     :style="'background-image: url('+board.background+'); background-size:cover;'"
+    @click.stop="isCreating = false">
   >
-    <error-alert v-if="boardsError" :message="boardsError.message"/>
-    <v-layout v-else column>
-      <v-flex xs12>
+    <v-row align="start" justify="start">
+      <v-col xs12 cols="12">
         <v-form v-model="valid" @submit.prevent @keydown.prevent.enter>
           <v-text-field
             dark
@@ -23,28 +25,32 @@
           >
           </v-text-field>
         </v-form>
-      </v-flex>
-      <v-flex>
-        <list-list
-          :board="board"
-        ></list-list>
-      </v-flex>
-    </v-layout>
+      </v-col>
+    </v-row>
+    <v-row align="start" justify="start" >
+      <v-col cols="2">
+        <list-create :isCreating="isCreating"
+        :board="board"
+        v-on:activateCreateMode="isCreating = true"></list-create>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
 <script>
 import { mapState, mapActions } from 'vuex';
 import { notEmptyRules } from '../utils/rules';
-import ErrorAlert from '../components/ErrorAlert.vue';
-import ListList from '../components/ListList.vue';
+import ListCreate from '../components/ListCreate.vue';
 
 export default {
   name: 'board',
   components: {
-    ErrorAlert,
+    ListCreate,
   },
   data: () => ({
+    valid: false,
+    isCreating: false,
+    createListHover: false,
     board: {},
     list: {},
     notEmptyRules,
@@ -82,15 +88,10 @@ export default {
         },
       });
     },
-    // eslint-disable-next-line
-/*     debouncedLoadActivities: _.debounce(function () {
-      this.loadActivities();
-    }, 100), */
     async myPatch() {
       // eslint-disable-next-line
       if (this.board._id) {
         await this.board.patch();
-        // this.debouncedLoadActivities();
       }
     },
   },

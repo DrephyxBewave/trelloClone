@@ -102,7 +102,7 @@ export default {
         const { Board } = this.$FeathersVuex.api;
         const board = new Board(this.board);
         board.save();
-        // this.$refs.form.reset();
+        this.$refs.form.reset();
       }
     },
   },
