@@ -31,20 +31,35 @@
         </v-col>
       </v-row>
       <v-row
+        v-if="!loadingCard"
+      >
+        <v-col
+          v-for="card in cards"
+          :key="card._id"
+          cols="12"
+        >
+        {{ card.name }}
+        </v-col>
+      </v-row>
+      <v-row
         align="end"
         justify="start"
       >
-        <v-col> add a card</v-col>
+        <v-col>
+          <card-create :list="list" />
+        </v-col>
       </v-row>
     </v-container>
   </v-card>
 </template>
 <script>
 import { mapState, mapActions, mapGetters } from 'vuex';
+import CardCreate from './CardCreate.vue';
 
 export default {
   name: 'list-card',
   components: {
+    CardCreate
   },
   props: ['list'],
   data: () => ({
@@ -53,24 +68,27 @@ export default {
   }),
 
   computed: {
+    ...mapState('cards', { loadingCard: 'isFindPending' }),
+    ...mapGetters('cards', { findCardsInStore: 'find' }),
+    cards() {
+      const retval = this.findCardsInStore({
+        query: {
+          listId: this.list._id,
+        },
+      }).data;
+      return retval;
+    }
   },
   mounted() {
+    this.findCards({
+      query: {
+        listId: this.list._id,
+      },
+    });
   },
   methods: {
     ...mapActions('lists', { removeList: 'remove' }),
+    ...mapActions('cards', { findCards: 'find' }),
   },
 };
 </script>
-<style>
-.auto-invert {
-  height: inherit;
-  background: inherit;
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent !important;
-  filter: invert(1) grayscale(1) contrast(9);
-}
-.v-menu__activator {
-  background: inherit;
-}
-</style>

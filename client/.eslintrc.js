@@ -9,7 +9,7 @@ module.exports = {
     '../.eslintrc-rules.js',
   ],
   parserOptions: {
-    // parser: 'babel-eslint',
+    parser: 'babel-eslint',
   },
   ignorePatterns: ['**/_formulas/*'],
   rules: {
