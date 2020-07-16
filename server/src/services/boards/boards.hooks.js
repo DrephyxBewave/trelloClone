@@ -20,7 +20,17 @@ module.exports = {
       setField({ from: 'params.user._id', as: 'params.query.ownerId' })
     ],
     remove: [
-      setField({ from: 'params.user._id', as: 'params.query.ownerId' })
+      setField({ from: 'params.user._id', as: 'params.query.ownerId' }),
+      async context => {
+        const boardLists = await context.app.services.lists.find({
+          query: { boardId: context.id },
+        });
+        await Promise.all(boardLists.data.map(_list => {
+          context.app.services.lists.remove({
+            _id:_list._id
+          });
+        }));
+      },
     ]
   },
 
